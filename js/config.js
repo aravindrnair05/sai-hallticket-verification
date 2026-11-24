@@ -1,2 +1,2 @@
-/* Set this to the deployed Cloudflare Worker URL, e.g. https://sai-hallticket-api.<account>.workers.dev */
-window.SAI_VERIFY_API_URL = "https://REPLACE-WITH-YOUR-WORKER.workers.dev/api/verify";
+/* Set this to your deployed Apps Script Web App URL ending in /exec. */
+window.SAI_VERIFY_GAS_URL = "hhttps://script.google.com/a/macros/saiuniversity.edu.in/s/AKfycbxIhetf9Jr9IQMxcgXIQ1PQ9BUzPGn-K8IpvaBjw7NkL3TcV_UCui7stKGI2iD-Dtw/exec";
