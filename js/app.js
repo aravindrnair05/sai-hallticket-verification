@@ -94,7 +94,7 @@
 
   async function verify(payload) {
     if (busy) return;
-    if (!gasUrl || gasUrl.includes('REPLACE_WITH_DEPLOYMENT_ID')) {
+    if (!gasUrl || gasUrl.includes('AKfycbxIhetf9Jr9IQMxcgXIQ1PQ9BUzPGn-K8IpvaBjw7NkL3TcV_UCui7stKGI2iD-Dtw')) {
       showError('The Apps Script verification URL has not been configured. Please contact the examination office.'); return;
     }
     busy = true;
