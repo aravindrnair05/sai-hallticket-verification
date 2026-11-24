@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#10233f">
+  <title>Hall Ticket Verification | Sai University</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+  <script src="js/config.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-mark" aria-hidden="true">SU</div>
+    <div class="brand-copy">
+      <strong>SAI UNIVERSITY</strong>
+      <span>Examination Hall Ticket Verification</span>
+    </div>
+    <span class="secure-pill">Faculty scanner</span>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">EXAMINATION SUPPORT</p>
+      <h1>Verify a hall ticket</h1>
+      <p>Scan the QR code printed on the student's hall ticket. The result is checked against the university's live ticket records.</p>
+    </section>
+
+    <section class="panel scanner-panel" aria-labelledby="scanner-heading">
+      <div class="section-heading">
+        <div>
+          <h2 id="scanner-heading">QR scanner</h2>
+          <p>Allow camera access when your browser asks.</p>
+        </div>
+        <span class="camera-icon" aria-hidden="true">▣</span>
+      </div>
+      <div id="reader" class="reader" aria-label="Camera QR scanner">
+        <div class="reader-placeholder" id="reader-placeholder">
+          <span class="scan-frame" aria-hidden="true">⌗</span>
+          <strong>Camera preview appears here</strong>
+          <span>Use the rear camera and keep the QR code inside the frame.</span>
+        </div>
+      </div>
+      <div class="button-row">
+        <button id="start-scan" class="button button-primary" type="button">Start camera</button>
+        <button id="stop-scan" class="button button-secondary" type="button" disabled>Stop camera</button>
+      </div>
+      <p id="camera-status" class="helper" role="status">Camera is not active.</p>
+    </section>
+
+    <section class="panel manual-panel" aria-labelledby="manual-heading">
+      <h2 id="manual-heading">Manual verification</h2>
+      <p>If the camera is unavailable, paste or enter the QR content here.</p>
+      <form id="manual-form">
+        <label for="qr-input">QR content or verification URL</label>
+        <input id="qr-input" name="qr-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="2048" placeholder="Paste QR content here" required>
+        <button class="button button-secondary full-width" type="submit">Verify entered code</button>
+      </form>
+    </section>
+
+    <section id="result-panel" class="panel result-panel" aria-live="polite" hidden>
+      <div id="result-banner" class="result-banner">
+        <span id="result-symbol" class="result-symbol" aria-hidden="true">?</span>
+        <div>
+          <p class="eyebrow">VERIFICATION RESULT</p>
+          <h2 id="result-title">Waiting for scan</h2>
+          <p id="result-message"></p>
+        </div>
+      </div>
+      <div id="student-details" class="student-details" hidden>
+        <img id="student-photo" class="student-photo" alt="Student photograph" hidden>
+        <div class="student-copy">
+          <h3 id="student-name"></h3>
+          <p id="student-id" class="student-id"></p>
+          <p id="student-school"></p>
+          <p id="student-major"></p>
+        </div>
+      </div>
+      <div id="ticket-details" class="details-grid" hidden></div>
+      <div id="course-details" class="course-details" hidden>
+        <h3>Course / examination details</h3>
+        <div id="course-list"></div>
+      </div>
+      <button id="scan-again" class="button button-primary full-width" type="button">Scan another hall ticket</button>
+    </section>
+
+    <p class="privacy-note">Use this page only for examination verification. Compare the displayed student identity and photograph with the person presenting the ticket. A genuine QR code alone does not prove who is holding the paper.</p>
+  </main>
+  <footer>© Sai University · Examination verification service</footer>
+</body>
+</html>
