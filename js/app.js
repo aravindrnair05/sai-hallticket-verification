@@ -1,5 +1,5 @@
 (() => {
-  const apiUrl = window.SAI_VERIFY_API_URL;
+  const gasUrl = window.SAI_VERIFY_GAS_URL;
   const $ = (id) => document.getElementById(id);
   const startButton = $('start-scan');
   const stopButton = $('stop-scan');
@@ -66,24 +66,44 @@
     resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function verifyViaJsonp(qrPayload) {
+    return new Promise((resolve, reject) => {
+      const callbackName = 'saiFacultyQrCallback';
+      const script = document.createElement('script');
+      let settled = false;
+      const cleanup = () => {
+        if (script.parentNode) script.parentNode.removeChild(script);
+        try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+        clearTimeout(timeoutId);
+      };
+      const finish = (fn, value) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        fn(value);
+      };
+      const timeoutId = setTimeout(() => finish(reject, new Error('Verification timed out. Check your internet connection and try again.')), 20000);
+      window[callbackName] = (data) => finish(resolve, data);
+      script.onerror = () => finish(reject, new Error('Could not reach Google Apps Script. Check the deployment URL and web app access settings.'));
+      const separator = gasUrl.includes('?') ? '&' : '?';
+      script.src = gasUrl + separator + 'action=facultyQrVerify&callback=' + callbackName + '&q=' + encodeURIComponent(qrPayload) + '&_=' + Date.now();
+      script.async = true;
+      document.head.appendChild(script);
+    });
+  }
+
   async function verify(payload) {
     if (busy) return;
-    if (!apiUrl || apiUrl.includes('REPLACE-WITH-YOUR-WORKER')) {
-      showError('The verification service has not been configured. Please contact the examination office.'); return;
+    if (!gasUrl || gasUrl.includes('REPLACE_WITH_DEPLOYMENT_ID')) {
+      showError('The Apps Script verification URL has not been configured. Please contact the examination office.'); return;
     }
     busy = true;
     startButton.disabled = true;
     setCameraStatus('Checking ticket against university records…');
     resultPanel.hidden = true;
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        cache: 'no-store',
-        body: JSON.stringify({ qrPayload: String(payload).trim() })
-      });
-      const data = await response.json();
-      if (!response.ok || !data.ok) throw new Error(data.message || 'The verification service could not complete the request.');
+      const data = await verifyViaJsonp(String(payload).trim());
+      if (!data || !data.ok) throw new Error((data && data.message) || 'The verification service could not complete the request.');
       showResult(data.verification);
       setCameraStatus('Verification completed. Scan another ticket when ready.');
     } catch (error) {
